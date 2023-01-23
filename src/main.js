@@ -8,6 +8,7 @@ async function search() {
   const market = document.getElementById('market').value;
   const shopId = document.getElementById('shopId').value;
   const result = await invoke("search", { shopId: shopId, market: market });
+  console.log(result);
 
   v1ResultEl.textContent = `var tokenInput = document.querySelector('input[name=token]');
 tokenInput.focus();
