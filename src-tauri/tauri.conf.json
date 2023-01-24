@@ -64,7 +64,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "first-tauri-app",
+        "title": "阿叡的工具箱 - 三把 key 腳本產生器",
         "width": 800
       }
     ]
