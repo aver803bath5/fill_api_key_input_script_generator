@@ -17,7 +17,12 @@ struct ShopApiProfile {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-async fn search(market: &str, shop_id: &str) -> Result<ShopApiProfile, ()> {
+async fn search(market: &str, shop_id: &str) -> Result<Option<ShopApiProfile>, ()> {
+    // return null if market or shop_id is empty
+    if market.is_empty() || shop_id.is_empty() {
+        return Ok(None);
+    }
+
     // read connection string from config file
     let file = File::open("connection_strings.json").unwrap();
     let config: serde_json::Value = serde_json::from_reader(file).unwrap();
@@ -43,13 +48,9 @@ async fn search(market: &str, shop_id: &str) -> Result<ShopApiProfile, ()> {
             salt: row.try_get("SupplierApiProfile_SaltKey").unwrap_or(String::new()),
             token: row.try_get("SupplierApiProfile_Token").unwrap_or(String::new()),
         })
-        .fetch_one(&pool)
+        .fetch_optional(&pool)
         .await
-        .unwrap_or(ShopApiProfile {
-            api_key: String::new(),
-            salt: String::new(),
-            token: String::new(),
-        }))
+        .unwrap())
 }
 
 fn main() {
