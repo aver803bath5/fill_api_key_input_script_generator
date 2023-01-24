@@ -552,6 +552,10 @@ video {
   margin-right: auto;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .whitespace-pre-wrap {
   white-space: pre-wrap;
 }
