@@ -42,7 +42,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "connection_strings.json"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {
