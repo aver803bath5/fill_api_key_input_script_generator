@@ -1,0 +1,6 @@
+{
+  "HK": "mssql://sa:yourStrong@Passw0rd@localhost:1433",
+  "TW": "TW",
+  "MY": "MY",
+  "PX": "PX"
+}

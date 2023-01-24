@@ -3,6 +3,7 @@ all(not(debug_assertions), target_os = "windows"),
 windows_subsystem = "windows"
 )]
 
+use std::fs::File;
 use serde::Serialize;
 use sqlx::mssql::{MssqlPoolOptions, MssqlRow};
 use sqlx::{Row};
@@ -17,11 +18,15 @@ struct ShopApiProfile {
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 async fn search(market: &str, shop_id: &str) -> Result<ShopApiProfile, ()> {
-    let db_account = "sa";
-    let db_password = "yourStrong@Passw0rd";
-    let conn_str = format!("mssql://{}:{}@localhost:1433", db_account, db_password);
+    // read connection string from config file
+    let file = File::open("connection_strings.json").unwrap();
+    let config: serde_json::Value = serde_json::from_reader(file).unwrap();
+
+    // read different connection string for different market
+    let conn_str = config[market.to_uppercase()].as_str().unwrap();
     let pool = MssqlPoolOptions::new()
         .max_connections(1)
+        .idle_timeout(std::time::Duration::from_secs(3))
         .connect(&conn_str).await.unwrap();
 
     Ok(sqlx::query(r#"
